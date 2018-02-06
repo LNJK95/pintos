@@ -45,6 +45,7 @@
 #define TITLE(x) printf(WHT x RESET)
 #define ERROR(x, ...) printf(RED "ERR: " x RESET, ##__VA_ARGS__); halt()
 #define SUCCESS(x) printf(GRN x RESET)
+#define ADAPT(x) printf(GRN x RESET)
 
 int main(void)
 {
@@ -60,6 +61,7 @@ int main(void)
 
   TITLE("TEST 1: Printing text\n");
   bytes_written = write(STDOUT_FILENO, dummyprint, strlen(dummyprint));
+  ADAPT("PLS WRITE SOMETHING IM DYING\n");
   if (bytes_written < 0 || (size_t)bytes_written != strlen(dummyprint))
   {
     ERROR("Incorrect number of written bytes returned from SYS_WRITE.\n");
@@ -70,7 +72,7 @@ int main(void)
   }
 
 
-/*
+
   TITLE("TEST 2: Creating file\n");
   created = create("test0", strlen(testdata));
   if (!created)
@@ -85,7 +87,7 @@ int main(void)
   }
 
   SUCCESS("TEST 2: Passed\n");
-*/
+
 
 
   TITLE("TEST 3: Opening files\n");

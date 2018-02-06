@@ -90,7 +90,7 @@ struct thread
     int priority;                       /* Priority. */
     
     //list of all opened files belonging to thread
-    struct file *fd_opened[130];
+    struct file *fd_opened[128];
 
     /* Shared between thread.c and synch.c. */
     struct list_elem elem;              /* List element. */

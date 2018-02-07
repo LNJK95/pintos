@@ -152,7 +152,6 @@ puts (const char *s)
 void
 putbuf (const char *buffer, size_t n) 
 {
-	//printf("call to putbuf\n");
   acquire_console ();
   while (n-- > 0)
     putchar_have_lock (*buffer++);

@@ -21,7 +21,6 @@ void syscall_init (void) {
 
 static void syscall_handler (struct intr_frame *f UNUSED) {
 
-  //printf ("system call!\n");
   int *syscall_no = f->esp;
   void *buffer;
   char *file_name;
@@ -48,7 +47,6 @@ static void syscall_handler (struct intr_frame *f UNUSED) {
     buffer = (void *)*(syscall_no+2);
     size = (unsigned)*(syscall_no+3);
     f->eax = write(fd, buffer, size);
-    //printf("back on the syscallhandler\n");
     break;
   case(SYS_CLOSE) :
     fd = (int)*(syscall_no+1);
@@ -59,16 +57,13 @@ static void syscall_handler (struct intr_frame *f UNUSED) {
     f->eax = open(file_name);
     break;
   case(SYS_CREATE) :
-    file_name = *(syscall_no+1);
-    size = *(syscall_no+2);
+    file_name = (char *)*(syscall_no+1);
+    size = (unsigned)*(syscall_no+2);
     f->eax = create(file_name, size);
     break;
   default :
     break;
   }
-  //return f->eax;
-  //printf("time to thread exit\n");
-  //thread_exit ();
 }
 
 void halt(void) {
@@ -81,47 +76,56 @@ void exit(int status) {
 }
 
 int write(int fd, const void *buffer, unsigned size) {
-  //printf("Calls function write\n");
+  int written_bytes = 0;
+  void *buffer_pointer = buffer;
   if (fd == 1) {
-    //check size to not be unreasonable
-    //printf("fd = 1\n");
-    putbuf(buffer, size);
-    //printf("passerat putbuf\n");
-    return (int) size;
+    while (size > 100) {
+      putbuf(buffer_pointer, 100);
+      buffer_pointer = buffer_pointer + 100;
+      size = size-100;
+      written_bytes = written_bytes+5;
+    }
+    putbuf(buffer_pointer, size);
+    written_bytes = written_bytes + size;
+    return written_bytes;
   }
   else if (1<fd && fd<131 && thread_current()->fd_opened[fd] != NULL) {
-    if (size > 100) {
-      //move file pos
-      //intervall write to file 100
-      //size --100
+    while (size > 100) {
+      written_bytes = written_bytes + file_write(thread_current()->fd_opened[fd], buffer, 100);
+      size = size-100;
     }
-    else {
-      return file_write(thread_current()->fd_opened[fd], buffer, size);
-    }
+    written_bytes = written_bytes + file_write(thread_current()->fd_opened[fd], buffer, size);
+    return written_bytes;
   }
   else {
-    exit(-1);
+    return -1;
   }
 }
 
 int read(int fd, void *buffer, unsigned size) {
+  int read_bytes = 0;
+  void *buffer_pointer = buffer;
   if (fd == 0) {
-    //check size to not be unreasonable
+    while (size > 100) {
+      input_getc(buffer_pointer, 100);
+      buffer_pointer = buffer_pointer + 100;
+      size = size - 100;
+      read_bytes = read_bytes + 100;
+    }
     input_getc(buffer, size);
-    return size;
+    read_bytes = read_bytes + size;
+    return read_bytes;
   }
-  else if (1<fd && fd<131) {
+  else if (1<fd && fd<131 && thread_current()->fd_opened[fd] != NULL) {
     if (size > 100) {
-      //move file pos
-      //intervall read to file 100
-      //size --100
+      read_bytes = read_bytes + file_read(thread_current()->fd_opened[fd], buffer, 100);
+      size = size - 100;
     }
-    else { 
-      return file_read(thread_current()->fd_opened[fd], buffer, size);
-    }
+    read_bytes = read_bytes + file_read(thread_current()->fd_opened[fd], buffer, size);
+    return read_bytes;
   }
   else {
-    exit(-1);
+    return -1;
   }
 }
 
@@ -130,13 +134,14 @@ void close(int fd) {
     thread_current()->fd_opened[fd] = NULL;
   }
   else {
+    printf("Tried to close a fd out of bounds\n");
     exit(-1);
   }
 }
 
 int open(const char *file_name) {
   if (filesys_open(file_name) == NULL) {
-    exit(-1);
+    return -1;
   }
   int i = 2;
   while (i < 131) {
@@ -146,7 +151,7 @@ int open(const char *file_name) {
     }
     i++;
   }
-  exit(-1);
+  return -1;
 }
 
 bool create(const char *file_name, unsigned initial_size) {

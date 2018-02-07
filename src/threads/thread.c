@@ -440,11 +440,14 @@ init_thread (struct thread *t, const char *name, int priority)
   t->priority = priority;
   t->magic = THREAD_MAGIC;
   
-  	int i = 2;
+  
+  #ifdef USERPROG
+  int i = 2;
   while (i < 131) {
     initial_thread->fd_opened[i] = NULL;
     i++;
   }
+  #endif
 }
 
 /* Allocates a SIZE-byte frame at the top of thread T's stack and

@@ -112,7 +112,7 @@ int read(int fd, void *buffer, unsigned size) {
       size = size - 100;
       read_bytes = read_bytes + 100;
     }
-    input_getc(buffer, size);
+    input_getc(buffer_pointer, size);
     read_bytes = read_bytes + size;
     return read_bytes;
   }

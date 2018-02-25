@@ -30,6 +30,10 @@ static struct thread *idle_thread;
 /* Initial thread, the thread running init.c:main(). */
 static struct thread *initial_thread;
 
+/* List of processes in THREAD_SLEEP state, that is, processes
+   that are waiting for their sleep ticks to reach 0. */
+static struct list sleep_list;
+
 /* Lock used by allocate_tid(). */
 static struct lock tid_lock;
 
@@ -89,6 +93,7 @@ thread_init (void)
 
   lock_init (&tid_lock);
   list_init (&ready_list);
+  //list_init(&sleep_list);
 
   /* Set up a thread structure for the running thread. */
   initial_thread = running_thread ();
@@ -442,8 +447,8 @@ init_thread (struct thread *t, const char *name, int priority)
   
   
   #ifdef USERPROG
-  int i = 2;
-  while (i < 131) {
+  int i = 0;
+  while (i < 128) {
     initial_thread->fd_opened[i] = NULL;
     i++;
   }

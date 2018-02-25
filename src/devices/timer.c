@@ -97,6 +97,23 @@ void
 timer_sleep (int64_t ticks) 
 {
   int64_t start = timer_ticks ();
+  //add thread to sleep queue
+  //check first thread ready to wake up
+  //if ready send to ready so scheduler deal with it
+
+  /*
+    past_state = thread_current()->status;
+    thread_current()->status = THREAD_SLEEPING;
+    //add to queue
+    thread_block();
+    //check for ready to wake in queue
+    //if ready
+    list_remove
+    thread_unblock
+    thread_current()->status = past_state;
+
+
+   */
 
   ASSERT (intr_get_level () == INTR_ON);
   while (timer_elapsed (start) < ticks) 

@@ -31,7 +31,7 @@ static unsigned loops_per_tick;
 struct list sleep_list;
 
 struct sleeper {
-  struct list_elem * elem;
+  struct list_elem elem;
   int64_t wake_up_point;
 };
 
@@ -116,8 +116,9 @@ timer_sleep (int64_t ticks)
 {
   struct sleeper *s;
   s->wake_up_point = timer_ticks() + ticks;
-  struct list_elem * e;
-  list_insert_ordered(&sleep_list, s, (list_less_func *) &compare_wakeup, NULL);
+  struct list_elem e;
+  s->elem = e;
+  list_insert_ordered(&sleep_list, &e, (list_less_func *) &compare_wakeup, NULL);
   sema_down(&sema);
   
   /*
@@ -163,7 +164,8 @@ timer_interrupt (struct intr_frame *args UNUSED)
   thread_tick ();
 
   while (!list_empty(&sleep_list)) {
-    struct sleeper * s = list_entry(list_front(&sleep_list), struct sleeper, elem);
+    struct list_elem * first_sleeper = list_front(&sleep_list);
+    struct sleeper * s = list_entry(first_sleeper, struct sleeper, elem);
     if (s->wake_up_point < timer_ticks()) {
       sema_up(&sema);
       list_pop_front(&sleep_list);
@@ -235,9 +237,9 @@ real_time_sleep (int64_t num, int32_t denom)
     }
 }
 
-bool compare_wakeup(const list_elem *a, const list_elem *b, void * aux) {
-  struct sleeper * sleeper_a = list_entry(a, sleeper, elem);
-  struct sleeper * sleeper_b = list_entry(b, sleeper, elem);
+bool compare_wakeup(const struct list_elem *a, const struct list_elem *b, void * aux) {
+  struct sleeper * sleeper_a = list_entry(a, struct sleeper, elem);
+  struct sleeper * sleeper_b = list_entry(b, struct sleeper, elem);
   if (sleeper_a->wake_up_point < sleeper_b->wake_up_point) {
     return true;
   }

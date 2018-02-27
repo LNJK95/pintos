@@ -1,4 +1,5 @@
 FAIL
-Kernel panic in run: PANIC at ../../lib/kernel/list.c:461 in list_insert_ordered(): assertion `less != NULL' failed.
-Call stack:
+Kernel panic in run: PANIC at ../../tests/threads/tests.c:95 in fail(): test failed
+Call stack: 0xc0106eab
 Translation of call stack:
+0xc0106eab: debug_panic (.../../lib/kernel/debug.c:34)

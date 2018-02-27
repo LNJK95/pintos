@@ -1,9 +1,1 @@
-FAIL
-Kernel panic in run: PANIC at ../../threads/interrupt.c:373 in intr_handler(): Unexpected interrupt
-Call stack: 0xc0106eab 0xc01074c8 0xc010113e 0xc010c785 0x8d1cec83
-Translation of call stack:
-0xc0106eab: debug_panic (.../../lib/kernel/debug.c:34)
-0xc01074c8: list_remove (.../../lib/kernel/list.c:260)
-0xc010113e: intr_enable (...../threads/interrupt.c:87)
-0xc010c785: intrff_stub (threads/intr-stubs.S:?)
-0x8d1cec83: (unknown)
+PASS

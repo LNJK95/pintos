@@ -1,5 +1,5 @@
-Writing command line to /tmp/uINKxwJVVb.dsk...
-qemu -hda /tmp/uINKxwJVVb.dsk -m 4 -net none -nographic -monitor null
+Writing command line to /tmp/o860Xws5S5.dsk...
+qemu -hda /tmp/o860Xws5S5.dsk -m 4 -net none -nographic -monitor null
 Kernel command line: -q run alarm-single
 Pintos booting with 4,088 kB RAM...
 371 pages available in kernel pool.
@@ -15,11 +15,11 @@ Executing 'alarm-single':
 (alarm-single) sleep duration will appear in nondescending order.
 (alarm-single) FAIL: thread 0 woke up 0 times instead of 1
 Kernel PANIC at ../../tests/threads/tests.c:95 in fail(): test failed
-Call stack: 0xc0106eabInterrupt 0x0e (#PF Page-Fault Exception) at eip=0xc01050e7
+Call stack: 0xc0106efbInterrupt 0x0e (#PF Page-Fault Exception) at eip=0xc0105137
  cr2=00000005 error=00000000
  eax=0000000b ebx=00000005 ecx=00000566 edx=000003d4
- esi=0000005f edi=c010c4a0 esp=c010d6cb ebp=c002fe68
- cs=0008 ds=0010 es=0010 ss=6eab
+ esi=0000005f edi=c010c500 esp=c010d72b ebp=c002fe68
+ cs=0008 ds=0010 es=0010 ss=6efb
 Kernel PANIC recursion at ../../threads/interrupt.c:373 in intr_handler().
 Timer: 23 ticks
 Thread: 0 idle ticks, 23 kernel ticks, 0 user ticks

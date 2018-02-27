@@ -28,7 +28,7 @@ static unsigned loops_per_tick;
 /* List of sleeping processes. */
 struct list sleep_list;
 
-/* Struct in sleep_list, contains a list_elem elem and a wake_up_point. */
+/* Struct in sleep_list, contains list_elem, wake up point and semaphore. */
 struct sleeper {
   struct list_elem elem;
   int64_t wake_up_point;
@@ -114,15 +114,16 @@ timer_elapsed (int64_t then)
 void
 timer_sleep (int64_t ticks)
 {
+  if (!(ticks > 0)) {
+    return;
+  }
   struct sleeper s;
+  sema_init(&(s.sema), 1);
   s.wake_up_point = timer_ticks() + ticks;
   struct list_elem e;
   s.elem = e;
-  sema_init(&(s.sema), 1);
-  if (sema_try_down(&(s.sema))) {
-    printf("sema tried down\n");
-    list_insert_ordered(&sleep_list, &e, (list_less_func *) &compare_wakeup, NULL);
-  }
+  sema_down(&(s.sema));
+  list_insert_ordered(&sleep_list, &e, (list_less_func *) &compare_wakeup, NULL);
 }
 
 /* Suspends execution for approximately MS milliseconds. */
@@ -159,19 +160,28 @@ timer_interrupt (struct intr_frame *args UNUSED)
 {
   ticks++;
   thread_tick ();
-  //enum intr_level old_level = intr_disable();
+
+  enum intr_level old_level = intr_disable();
+  //printf("interrupt disabled \n");
   while (!list_empty(&sleep_list)) {
-    printf("sleep list not empty\n");
+    //printf("while loop\n");
     struct list_elem * first_sleeper = list_front(&sleep_list);
+    //printf("first sleeper found\n");
     struct sleeper * s = list_entry(first_sleeper, struct sleeper, elem);
+    //printf("list entry retrieved \n");
     if (s->wake_up_point < timer_ticks()) {
-      printf("wake up point passed\n");
+      //printf("wake up point passed\n");
       sema_up(&(s->sema));
-      list_pop_front(&sleep_list);
+      //printf("sema up\n");
+      if (!list_empty(&sleep_list)) {
+	//printf("list not empty\n");
+	list_pop_front(&sleep_list);
+	//printf("list popped\n");
+      }
+      break;
     }
-    break;
   }
-  //intr_set_level(old_level);
+  intr_set_level(old_level);
 }
 
 /* Returns true if LOOPS iterations waits for more than one timer

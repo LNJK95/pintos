@@ -42,5 +42,5 @@ Differences in `diff -u' format:
 - (alarm-simultaneous) iteration 4, thread 0: woke up 10 ticks later
 - (alarm-simultaneous) iteration 4, thread 1: woke up 0 ticks later
 - (alarm-simultaneous) iteration 4, thread 2: woke up 0 ticks later
-+ (alarm-simultaneous) iteration 0, thread 0: woke up after -1072609320 ticks
++ (alarm-simultaneous) iteration 0, thread 0: woke up after -1072609288 ticks
   (alarm-simultaneous) end

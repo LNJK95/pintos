@@ -1,5 +1,5 @@
-Writing command line to /tmp/6STqRLSjkn.dsk...
-qemu -hda /tmp/6STqRLSjkn.dsk -m 4 -net none -nographic -monitor null
+Writing command line to /tmp/caT1OBzNk5.dsk...
+qemu -hda /tmp/caT1OBzNk5.dsk -m 4 -net none -nographic -monitor null
 Kernel command line: -q run alarm-zero
 Pintos booting with 4,088 kB RAM...
 371 pages available in kernel pool.
@@ -12,20 +12,7 @@ Executing 'alarm-zero':
 (alarm-zero) end
 Execution of 'alarm-zero' complete.
 Timer: 22 ticks
-Thread: 0 idle ticks, 22 kernel ticks, 0 user ticksInterrupt 0x0e (#PF Page-Fault Exception) at eip=0xc01074c8
- cr2=0000000e error=00000002
- eax=c002ff18 ebx=c002ff18 ecx=c0105685 edx=0000000a
- esi=c010cc70 edi=c010ccaa esp=c0114da0 ebp=c002fdfc
- cs=0008 ds=0010 es=0010 ss=0097
-Kernel PANIC at ../../threads/interrupt.c:373 in intr_handler(): Unexpected interrupt
-Call stack: 0xc0106eab 0xc01074c8 0xc010113e 0xc010c785 0x8d1cec83Interrupt 0x0e (#PF Page-Fault Exception) at eip=0xc01050e7
- cr2=c31cc483 error=00000000
- eax=0000000b ebx=c31cc483 ecx=00000722 edx=000003d4
- esi=00000175 edi=c010bcc9 esp=c010d6cb ebp=c002fc7c
- cs=0008 ds=0010 es=0010 ss=ec83
-Kernel PANIC recursion at ../../threads/interrupt.c:373 in intr_handler().
-Timer: 23 ticks
-Thread: 0 idle ticks, 23 kernel ticks, 0 user ticks
-Console: 1135 characters output
+Thread: 0 idle ticks, 22 kernel ticks, 0 user ticks
+Console: 385 characters output
 Keyboard: 0 keys pressed
 Powering off...

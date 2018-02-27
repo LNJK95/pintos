@@ -12,12 +12,28 @@
 
 static void syscall_handler (struct intr_frame *);
 
+static void halt(void);
 
+static void exit(int status);
+
+static bool create(const char *file, unsigned initial_size);
+
+static int open(const char *file);
+
+static void close(int fd);
+
+static int read(int fd, void *buffer, unsigned size);
+
+static int write(int fd, const void *buffer, unsigned size);
+
+
+/* Initializes syscall */
 void syscall_init (void) {
 
   intr_register_int (0x30, 3, INTR_ON, syscall_handler, "syscall");
 }
 
+/* Syscall handler that assigns the syscall number to corresponding syscall */
 static void syscall_handler (struct intr_frame *f UNUSED) {
 
   int *syscall_no = f->esp;
@@ -67,15 +83,19 @@ static void syscall_handler (struct intr_frame *f UNUSED) {
   }
 }
 
+
+/* Syscall HALT */
 static void halt(void) {
   power_off();
 }
 
+/* Syscall EXIT */
 static void exit(int status) {
   int kernel_status = status;
   thread_exit();
 }
 
+/* Syscall WRITE */
 static int write(int fd, const void *buffer, unsigned size) {
   int written_bytes = 0;
   if (fd == 1) {
@@ -101,6 +121,8 @@ static int write(int fd, const void *buffer, unsigned size) {
   }
 }
 
+
+/* Syscall READ */
 static int read(int fd, void *buffer, unsigned size) {
   int read_bytes = 0;
   if (fd == 0) {
@@ -124,6 +146,7 @@ static int read(int fd, void *buffer, unsigned size) {
   }
 }
 
+/* Syscall CLOSE */
 static void close(int fd) {
   if (1<fd && fd<130) {
     file_close(thread_current()->fd_opened[fd-2]);
@@ -134,6 +157,7 @@ static void close(int fd) {
   }
 }
 
+/* Syscall OPEN */
 static int open(const char *file_name) {
   int i = 2;
   while (i < 130) {
@@ -150,6 +174,7 @@ static int open(const char *file_name) {
   return -1;
 }
 
+/* Syscall CREATE*/
 static bool create(const char *file_name, unsigned initial_size) {
   return filesys_create(file_name, initial_size);
 }

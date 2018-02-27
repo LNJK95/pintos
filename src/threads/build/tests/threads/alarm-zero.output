@@ -1,0 +1,20 @@
+Writing command line to /tmp/fAKOHwLndq.dsk...
+qemu -hda /tmp/fAKOHwLndq.dsk -m 4 -net none -nographic -monitor null
+Kernel command line: -q run alarm-zero
+Pintos booting with 4,088 kB RAM...
+371 pages available in kernel pool.
+371 pages available in user pool.
+Calibrating timer...  209,510,400 loops/s.
+Boot complete.
+Executing 'alarm-zero':
+(alarm-zero) begin
+Kernel PANIC at ../../lib/kernel/list.c:461 in list_insert_ordered(): assertion `less != NULL' failed.
+Call stack:.
+The `backtrace' program can make call stacks useful.
+Read "Backtraces" in the "Debugging Tools" chapter
+of the Pintos documentation for more information.
+Timer: 21 ticks
+Thread: 0 idle ticks, 21 kernel ticks, 0 user ticks
+Console: 584 characters output
+Keyboard: 0 keys pressed
+Powering off...

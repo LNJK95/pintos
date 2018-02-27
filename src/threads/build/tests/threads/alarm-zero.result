@@ -1,0 +1,4 @@
+FAIL
+Kernel panic in run: PANIC at ../../lib/kernel/list.c:461 in list_insert_ordered(): assertion `less != NULL' failed.
+Call stack:
+Translation of call stack:

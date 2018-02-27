@@ -30,10 +30,6 @@ static struct thread *idle_thread;
 /* Initial thread, the thread running init.c:main(). */
 static struct thread *initial_thread;
 
-/* List of processes in THREAD_SLEEP state, that is, processes
-   that are waiting for their sleep ticks to reach 0. */
-static struct list sleep_list;
-
 /* Lock used by allocate_tid(). */
 static struct lock tid_lock;
 

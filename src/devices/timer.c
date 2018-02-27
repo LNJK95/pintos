@@ -118,12 +118,13 @@ timer_sleep (int64_t ticks)
     return;
   }
   struct sleeper s;
-  sema_init(&(s.sema), 1);
+  sema_init(&(s.sema), 0);
   s.wake_up_point = timer_ticks() + ticks;
-  struct list_elem e;
-  s.elem = e;
+
+  enum intr_level old_level = intr_disable();
+  list_insert_ordered(&sleep_list, &(s.elem), &compare_wakeup, NULL);
+  intr_set_level(old_level);
   sema_down(&(s.sema));
-  list_insert_ordered(&sleep_list, &e, (list_less_func *) &compare_wakeup, NULL);
 }
 
 /* Suspends execution for approximately MS milliseconds. */
@@ -169,15 +170,13 @@ timer_interrupt (struct intr_frame *args UNUSED)
     //printf("first sleeper found\n");
     struct sleeper * s = list_entry(first_sleeper, struct sleeper, elem);
     //printf("list entry retrieved \n");
-    if (s->wake_up_point < timer_ticks()) {
+    if (s->wake_up_point <= timer_ticks()) {
       //printf("wake up point passed\n");
+      list_pop_front(&sleep_list);
       sema_up(&(s->sema));
       //printf("sema up\n");
-      if (!list_empty(&sleep_list)) {
-	//printf("list not empty\n");
-	list_pop_front(&sleep_list);
-	//printf("list popped\n");
-      }
+    }
+    else {
       break;
     }
   }

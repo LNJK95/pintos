@@ -1,20 +1,33 @@
-Writing command line to /tmp/fsVom1U25E.dsk...
-qemu -hda /tmp/fsVom1U25E.dsk -m 4 -net none -nographic -monitor null
+Writing command line to /tmp/YkYn_jFXDV.dsk...
+qemu -hda /tmp/YkYn_jFXDV.dsk -m 4 -net none -nographic -monitor null
 Kernel command line: -q run alarm-negative
 Pintos booting with 4,088 kB RAM...
 371 pages available in kernel pool.
 371 pages available in user pool.
-Calibrating timer...  366,592,000 loops/s.
+Calibrating timer...  419,020,800 loops/s.
 Boot complete.
 Executing 'alarm-negative':
 (alarm-negative) begin
-Kernel PANIC at ../../lib/kernel/list.c:461 in list_insert_ordered(): assertion `less != NULL' failed.
-Call stack:.
-The `backtrace' program can make call stacks useful.
-Read "Backtraces" in the "Debugging Tools" chapter
-of the Pintos documentation for more information.
+(alarm-negative) PASS
+(alarm-negative) end
+Execution of 'alarm-negative' complete.
+Timer: 22 ticks
+Thread: 0 idle ticks, 22 kernel ticks, 0 user ticks
+Console: 409 characters output
+Keyboard: 0 keys Interrupt 0x0e (#PF Page-Fault Exception) at eip=0xc01074c8
+ cr2=0000000e error=00000002
+ eax=c002ff18 ebx=c002ff18 ecx=00000011 edx=0000000a
+ esi=c010cc70 edi=c010d3b6 esp=c0114da0 ebp=c002fe0c
+ cs=0008 ds=0010 es=0010 ss=0097
+Kernel PANIC at ../../threads/interrupt.c:373 in intr_handler(): Unexpected interrupt
+Call stack: 0xc0106eab 0xc01074c8 0xc010113e 0xc010c785 0x8d1cec83Interrupt 0x0e (#PF Page-Fault Exception) at eip=0xc01050e7
+ cr2=c31cc483 error=00000000
+ eax=0000000b ebx=c31cc483 ecx=00000772 edx=000003d4
+ esi=00000175 edi=c010bcc9 esp=c010d6cb ebp=c002fc8c
+ cs=0008 ds=0010 es=0010 ss=ec83
+Kernel PANIC recursion at ../../threads/interrupt.c:373 in intr_handler().
 Timer: 23 ticks
 Thread: 0 idle ticks, 23 kernel ticks, 0 user ticks
-Console: 596 characters output
+Console: 1208 characters output
 Keyboard: 0 keys pressed
 Powering off...
